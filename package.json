@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lg-bus": "^1.0.2",
     "lg-tools": "^1.0.50"
   }
 }

@@ -1,8 +1,9 @@
+import { APP_OSS_HOST, APP_KEY_PHONE } from '@/constants/index.js';
 export default class Utils {
 	/**
-	 * 关注公众号
+	 * 预览：长按识别关注微信公众号
 	 */
-	static subscribeMp() {
+	static subscribeOfficialAccounts() {
 		uni.previewImage({
 			urls: [
 				'https://qn.d-dou.com/dcep/dbean/4278855d38954d89a5095b9f6e637071ri1m0p.png'
@@ -12,9 +13,9 @@ export default class Utils {
 	}
 
 	/**
-	 * 企业微信
+	 *  预览：长按识别添加企业微信
 	 */
-	static enterpriseWx() {
+	static joinEnterpriseWechat() {
 		uni.previewImage({
 			urls: [
 				'https://qn.d-dou.com/dcep/dbean/4068932c9f9f4b4bafabe34c43f6fb833zlvce.png'
@@ -22,6 +23,7 @@ export default class Utils {
 			indicator: "none"
 		})
 	}
+
 	/**
 	 * 播放音频
 	 * 测试音频地址：https://qn.d-dou.com/dpoint/media/aigei_com.mp3
@@ -47,7 +49,7 @@ export default class Utils {
 		});
 		return ctx;
 	}
-	
+
 	/**
 	 * 轻提示
 	 * @param {Object} title
@@ -78,7 +80,24 @@ export default class Utils {
 			url
 		})
 	}
-
+	/**
+	 * 页面返回
+	 * @param {Number} delta   
+	 */
+	static navigateBack(delta = 1) {
+		uni.navigateBack({
+			delta
+		})
+	}
+	/**
+	 * 页面重载
+	 * @param {Object} url
+	 */
+	static reLaunch(url) {
+		uni.reLaunch({
+			url
+		})
+	}
 	/**
 	 * 页面出栈
 	 */
@@ -87,6 +106,7 @@ export default class Utils {
 			delta
 		})
 	}
+
 	/**
 	 * 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页
 	 * @param {Object} url
@@ -97,63 +117,54 @@ export default class Utils {
 		})
 	}
 
-
 	/**
-	 * 登录
-	 * @param {type} fetch 后台api登录接口函数
+	 * 执行登录
+	 * @param {Function} login 登录接口函数
+	 * @param {Function} editApiFn 编辑用户信息接口函数
 	 */
-	static login({
-		loginFn,
-		shareCode,
-		editFn
-	}) {
+	static login(loginFn, eidt, shareCode) {
 		return new Promise((resolve, reject) => {
-			// 1. 处理请求参数
-			let scopes;
-			let provider;
-			let withCredentials;
-			// #ifdef MP-WEIXIN
-			provider = 'weixin';
-			withCredentials = true;
-			// #endif
-			// #ifdef MP-ALIPAY
-			provider = 'alipay';
-			scopes = ['auth_user'];
-			// #endif
-
-			// 2. 获取code
 			uni.login({
-				provider,
-				scopes,
-				withCredentials,
-				success({
-					code,
-					authCode
-				}) {
-					// #ifdef MP-ALIPAY
-					code = authCode;
-					// #endif
-
-					// 3. 调用登录接口
+				provider: "weixin",
+				scopes: "auth_base", // 静默授权
+				withCredentials: true,
+				success({ code }) {
 					loginFn && loginFn({
 						code,
 						shareCode
 					}).then(r => {
 						if (r && r.code === 0) {
-							// 4. 存储 token & 手机绑定状态
 							const {
 								hasBindPhone,
 								token
 							} = r.data;
-							uni.setStorageSync("DPMP_TOKEN", token);
-							uni.setStorageSync("DPMP_HAS_BIND_PHOINE", hasBindPhone);
-							resolve();
+							uni.setStorageSync("APP_KEY_TOKEN", token);
+							uni.setStorageSync("APP_KEY_PHONE", hasBindPhone);
+							resolve(null);
+							// -- 判断用户是否授权获取信息，如果已授权则获取
+							/*
+							uni.getSetting({
+								success(res) {
+									if (res.authSetting['scope.userInfo']) {
+										uni.getUserInfo({
+											provider: 'weixin',
+											withCredentials: true,
+											success: function({ userInfo }) {
+												if (userInfo) {
+													console.log(userInfo);
+												}
+											}
+										});
+									} else {
+										
+									}
+								}
+							})*/
 						}
 					})
 				},
 				fail() {
 					reject();
-					Utils.toast('微信登录授权失败');
 				}
 			})
 		})
@@ -162,9 +173,9 @@ export default class Utils {
 	/**
 	 * 检查是否绑定手机号
 	 */
-	static checkBindPhone() {
+	static checkLogin() {
 		return new Promise((resolve, reject) => {
-			if (uni.getStorageSync("HAS_BIND_PHOINE")) {
+			if (uni.getStorageSync(APP_KEY_PHONE)) {
 				resolve();
 			} else {
 				uni.navigateTo({
@@ -297,6 +308,35 @@ export default class Utils {
 				})
 
 			}
+		})
+	}
+
+	/**
+	 * OSS - 文件上传
+	 * @param {Object} configs 配置信息
+	 */
+	static uploadFile({ signature, ossAccessKeyId, key, securityToken, filePath, policy }) {
+		return new Promise((resolve, reject) => {
+			uni.uploadFile({
+				url: APP_OSS_HOST,
+				filePath,
+				name: 'file',
+				formData: {
+					key,
+					policy,
+					OSSAccessKeyId: ossAccessKeyId,
+					signature,
+					// 'x-oss-security-token': securityToken // 使用STS签名时必传。
+				},
+				success: (res) => {
+					if (res.statusCode === 204) {
+						resolve(null)
+					}
+				},
+				fail: err => {
+					reject(err);
+				}
+			});
 		})
 	}
 }
