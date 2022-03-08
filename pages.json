@@ -2,7 +2,7 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "英洪维修"
+			"navigationBarTitleText": "小程序模板"
 		}
 	}, {
 		"path": "pages/mine/mine",
@@ -18,7 +18,19 @@
 			"enablePullDownRefresh": false,
 			"navigationStyle": "custom"
 		}
-	} ],
+	}, {
+		"path": "pages/web-page/web-page",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+	}, {
+		"path": "pages/orders/orders",
+		"style": {
+			"navigationBarTitleText": "在线下单",
+			"enablePullDownRefresh": false
+		}
+	}],
 	"tabBar": {
 		"color": "#cdcdcd",
 		"selectedColor": "#1946BB",

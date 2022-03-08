@@ -1,20 +1,11 @@
 <script setup>
-	import {
-		reactive,
-		onMounted
-	} from 'vue';
+	import { reactive, onMounted } from 'vue';
 	import Tools from 'lg-tools';
 	import Bus from 'lg-bus';
 	import Utils from '@/utils/index.js';
-	import {
-		APP_KEY_PHONE,
-		APP_MINE_FNS,
-		APP_MINE_ORDERS
-	} from '@/constants/index.js';
+	import { APP_KEY_PHONE, APP_MINE_FNS, APP_MINE_ORDERS } from '@/constants/index.js';
 
 	// -- constants
-
-
 
 	// -- state
 	const state = reactive({
@@ -55,8 +46,7 @@
 			<view class="wrap pl-40 flex-h-between rounded-24 bg-FFFFFF">
 				<view class="flex-h-start">
 					<template v-if="state.isLogin">
-						<image class="icon-96x96 rounded-circle"
-							src="https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360">
+						<image class="icon-96x96 rounded-circle" src="https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360">
 						</image>
 						<view class="ml-24">
 							<view class="f32 lh-44 f-600 color-202020">LiKG</view>
@@ -64,8 +54,7 @@
 						</view>
 					</template>
 					<template v-else>
-						<image class="icon-96x96 rounded-circle"
-							src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/WOT1646215161264.png">
+						<image class="icon-96x96 rounded-circle" src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/WOT1646215161264.png">
 						</image>
 						<view class="f32 f-600 color-202020 ml-24" @click="Utils.push('/pages/auth/auth')">立即登录
 						</view>
@@ -79,8 +68,7 @@
 					<view class="f32 lh-44 f-600 color-202020">我的订单</view>
 					<view class="flex-h-center">
 						<text class="f24 lh-34 color-999999 mr-8">全部订单</text>
-						<image class="icon-arrow"
-							src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/EIL1646219729607.png">
+						<image class="icon-arrow" src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/EIL1646219729607.png">
 						</image>
 					</view>
 				</view>
@@ -98,8 +86,7 @@
 				<block v-for="(item, index) in APP_MINE_FNS" :key="item.label">
 					<view class="py-30 flex-h-between " :class="index !== 3 ? 'border-bottom' : ''">
 						<text class="f28 lh-40 f-400 color-444444">{{item.label}}</text>
-						<image class="icon-arrow mr-40"
-							src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/EIL1646219729607.png">
+						<image class="icon-arrow mr-40" src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/EIL1646219729607.png">
 						</image>
 					</view>
 				</block>

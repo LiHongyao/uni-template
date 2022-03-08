@@ -1,9 +1,5 @@
 <script>
-	import Utils from './utils';
 	export default {
-		globalData: {
-			$utils: Utils
-		},
 		onLaunch: function() {
 			console.log('App Launch')
 		},

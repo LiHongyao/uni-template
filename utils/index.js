@@ -1,4 +1,8 @@
-import { APP_OSS_HOST, APP_KEY_PHONE } from '@/constants/index.js';
+// -- 引入常量配置
+import { APP_OSS_HOST, APP_KEY_PHONE, APP_KEY_TOKEN } from '@/constants/index.js';
+import crypto from 'crypto-js';
+import { Base64 } from 'js-base64';
+
 export default class Utils {
 	/**
 	 * 预览：长按识别关注微信公众号
@@ -81,15 +85,6 @@ export default class Utils {
 		})
 	}
 	/**
-	 * 页面返回
-	 * @param {Number} delta   
-	 */
-	static navigateBack(delta = 1) {
-		uni.navigateBack({
-			delta
-		})
-	}
-	/**
 	 * 页面重载
 	 * @param {Object} url
 	 */
@@ -129,38 +124,31 @@ export default class Utils {
 				scopes: "auth_base", // 静默授权
 				withCredentials: true,
 				success({ code }) {
-					loginFn && loginFn({
-						code,
-						shareCode
-					}).then(r => {
-						if (r && r.code === 0) {
-							const {
-								hasBindPhone,
-								token
-							} = r.data;
-							uni.setStorageSync("APP_KEY_TOKEN", token);
-							uni.setStorageSync("APP_KEY_PHONE", hasBindPhone);
-							resolve(null);
-							// -- 判断用户是否授权获取信息，如果已授权则获取
-							/*
-							uni.getSetting({
-								success(res) {
-									if (res.authSetting['scope.userInfo']) {
-										uni.getUserInfo({
-											provider: 'weixin',
-											withCredentials: true,
-											success: function({ userInfo }) {
-												if (userInfo) {
-													console.log(userInfo);
-												}
+					loginFn && loginFn(code).then(r => {
+						console.log("登录授权code：", code);
+						const { isBindPhone,  token } = r.data;
+						uni.setStorageSync(APP_KEY_TOKEN, token);
+						uni.setStorageSync(APP_KEY_PHONE, isBindPhone);
+						resolve(null);
+						// -- 判断用户是否授权获取信息，如果已授权则获取
+						/*
+						uni.getSetting({
+							success(res) {
+								if (res.authSetting['scope.userInfo']) {
+									uni.getUserInfo({
+										provider: 'weixin',
+										withCredentials: true,
+										success: function({ userInfo }) {
+											if (userInfo) {
+												console.log(userInfo);
 											}
-										});
-									} else {
-										
-									}
+										}
+									});
+								} else {
+									
 								}
-							})*/
-						}
+							}
+						})*/
 					})
 				},
 				fail() {
@@ -291,7 +279,6 @@ export default class Utils {
 		uni.getSetting({
 			withSubscriptions: true,
 			success(res) {
-				console.log(res)
 				uni.showModal({
 					title: "授权获取你的订阅",
 					content: "用于定位当前位置和商家的距离",
@@ -313,24 +300,40 @@ export default class Utils {
 
 	/**
 	 * OSS - 文件上传
-	 * @param {Object} configs 配置信息
+	 * @param {Object} uploadFile 配置信息
 	 */
-	static uploadFile({ signature, ossAccessKeyId, key, securityToken, filePath, policy }) {
+	static uploadFile({ key, filePath, accessKeySecret, accessKeyId, securityToken }) {
 		return new Promise((resolve, reject) => {
+			// 1. 客户端获取签名
+			// -- 构造policy
+			const date = new Date();
+			date.setHours(date.getHours() + 1);
+			const policyText = {
+				expiration: date.toISOString(),
+				conditions: [
+					["content-length-range", 0, 1024 * 1024 * 1024],
+				],
+			};
+			const policy = Base64.encode(JSON.stringify(policyText));
+			// -- 获取签名
+			const signature = crypto.enc.Base64.stringify(crypto.HmacSHA1(policy, accessKeySecret));
+			// 2.构造formData
+			const formData = {
+				key,
+				policy,
+				signature,
+				OSSAccessKeyId: accessKeyId,
+				"x-oss-security-token": securityToken // 使用STS签名时必传。
+			}
+			// 3. 执行上传
 			uni.uploadFile({
 				url: APP_OSS_HOST,
 				filePath,
 				name: 'file',
-				formData: {
-					key,
-					policy,
-					OSSAccessKeyId: ossAccessKeyId,
-					signature,
-					// 'x-oss-security-token': securityToken // 使用STS签名时必传。
-				},
+				formData,
 				success: (res) => {
 					if (res.statusCode === 204) {
-						resolve(null)
+						resolve(`${APP_OSS_HOST}/${key}`);
 					}
 				},
 				fail: err => {

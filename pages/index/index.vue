@@ -2,7 +2,7 @@
 	import { reactive } from 'vue';
 	import Tools from 'lg-tools';
 	import Utils from '@/utils/index.js';
-	
+
 	// -- constants
 	const dotsStyles = {
 		background: 'rgb(255, 255, 255)',
@@ -25,15 +25,30 @@
 			{ img: 'https://img95.699pic.com/photo/40006/9851.jpg_wh300.jpg' },
 			{ img: 'https://img95.699pic.com/photo/40006/9851.jpg_wh300.jpg' }
 		],
-		workers: [
-			{ avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
-				name: '李鸿耀', phone: '17398888669', star: 5 },
-			{ avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
-				name: '李鸿耀', phone: '17398888669', star: 5 },
-			{ avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
-				name: '李鸿耀', phone: '17398888669', star: 5 },
-			{ avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
-				name: '李鸿耀', phone: '17398888669', star: 5 },
+		workers: [{
+				avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
+				name: '李鸿耀',
+				phone: '17398888669',
+				star: 5
+			},
+			{
+				avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
+				name: '李鸿耀',
+				phone: '17398888669',
+				star: 5
+			},
+			{
+				avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
+				name: '李鸿耀',
+				phone: '17398888669',
+				star: 5
+			},
+			{
+				avatar: 'https://img0.baidu.com/it/u=2427374459,2509009085&fm=253&fmt=auto&app=120&f=JPEG?w=360&h=360',
+				name: '李鸿耀',
+				phone: '17398888669',
+				star: 5
+			},
 		]
 	});
 	// -- life circles
@@ -44,7 +59,19 @@
 	}
 	const onCreateOrder = () => {
 		Utils.checkLogin().then(() => {
-			// ...
+			uni.navigateTo({
+				url: '/pages/orders/orders?q=1',
+				events: {
+					// -- 接收子页面传递的数据
+					acceptDataFromOrders: (data) => {
+						console.log(data);
+					}
+				},
+				success({ eventChannel }) {
+					// -- 向子页面传递数据
+					eventChannel.emit('acceptDataFromIndex', { message: 'Hello, 我来自首页~' });
+				}
+			})
 		})
 	}
 </script>
@@ -53,8 +80,7 @@
 <template>
 	<view class="page">
 		<!-- 轮播图 start -->
-		<uni-swiper-dot :current="state.current" field="content" mode="round" :info="state.banners"
-			:dotsStyles="dotsStyles">
+		<uni-swiper-dot :current="state.current" field="content" mode="round" :info="state.banners" :dotsStyles="dotsStyles">
 			<swiper class="swiper" :circular="true" @change="onSwiperChange" autoplay>
 				<swiper-item v-for="(banner, index) in state.banners" :key="index">
 					<image class="swiper-item" :src="banner.img" mode="aspectFill"></image>
@@ -80,8 +106,7 @@
 		<view class="mt-32">
 			<view class="workers-h flex-h-center mb-16">
 				<view class="line"></view>
-				<image class="icon-40x40"
-					src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/BOT1646214847478.png"></image>
+				<image class="icon-40x40" src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/BOT1646214847478.png"></image>
 				<view class="f32 lh-44 color-1946BB ml-2">师傅榜</view>
 				<view class="line"></view>
 			</view>
@@ -92,8 +117,7 @@
 						<view class="flex-h-between w-100">
 							<view class="mr-12 f28 lh-40 color-202020">{{item.name}}</view>
 							<view class="star flex-h-center f20">
-								<image
-									src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/HLO1646219098373.png">
+								<image src="https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/HLO1646219098373.png">
 								</image>
 								{{item.star}}星师傅
 							</view>
@@ -168,6 +192,7 @@
 			background: #FFD4CE;
 			border-radius: 16rpx;
 			color: #CE5B78;
+
 			image {
 				width: 28rpx;
 				height: 24rpx;

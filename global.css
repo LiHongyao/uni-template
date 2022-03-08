@@ -1,17 +1,12 @@
 /**
  * 自定义字体
  */
-/* @font-face {
-	font-family: "DIN-Alternate-Bold";
-	src: url('/static/fonts/DIN-Alternate-Bold.otf');
-}
 @font-face {
-	font-family: "DIN-Black";
-	src: url('/static/fonts/DIN-Black.otf');
+	font-family: "DIN-Bold";
+	src: url('/static/fonts/DIN-Bold.otf');
 }
-
-.ff-DIN-Bold { font-family: 'DIN-Alternate-Bold';}
-.ff-DIN-Black { font-family: 'DIN-Black';} */
+.ff-DIN-Bold { font-family: 'DIN-Bold';}
+	
 	
 	
 /**
@@ -102,6 +97,7 @@ image { box-sizing: content-box; }
 .px-40 { padding-left: 40rpx; padding-right: 40rpx; }
 .px-44 { padding-left: 44rpx; padding-right: 44rpx; }
 .px-48 { padding-left: 48rpx; padding-right: 48rpx; }
+.px-56 { padding-left: 56rpx; padding-right: 56rpx; }
 .px-60 { padding-left: 60rpx; padding-right: 60rpx; }
 .px-64 { padding-left: 64rpx; padding-right: 64rpx; }
 .px-72 { padding-left: 72rpx; padding-right: 72rpx; }
@@ -139,6 +135,7 @@ image { box-sizing: content-box; }
 .pt-54 { padding-top: 54rpx; }
 .pt-70 { padding-top: 70rpx; }
 .pt-76 { padding-top: 76rpx; }
+.pt-80 { padding-top: 80rpx; }
 .pt-84 { padding-top: 84rpx; }
 .pt-94 { padding-top: 94rpx; }
 
@@ -159,8 +156,10 @@ image { box-sizing: content-box; }
 .pr-26 { padding-right: 26rpx; }
 .pr-27 { padding-right: 27rpx; }
 .pr-28 { padding-right: 28rpx; }
+.pr-30 { padding-right: 30rpx; }
 .pr-32 { padding-right: 32rpx; }
 .pr-38 { padding-right: 38rpx; }
+.pr-40 { padding-right: 40rpx; }
 .pr-42 { padding-right: 42rpx; }
 .pr-46 { padding-right: 46rpx; }
 
@@ -190,6 +189,7 @@ image { box-sizing: content-box; }
 .pl-28 { padding-left: 28rpx; }
 .pl-30 { padding-left: 30rpx; }
 .pl-32 { padding-left: 32rpx; }
+.pl-36 { padding-left: 36rpx; }
 .pl-40 { padding-left: 40rpx; }
 .pl-42 { padding-left: 42rpx; }
 .pl-44 { padding-left: 44rpx; }
@@ -197,6 +197,7 @@ image { box-sizing: content-box; }
 .pl-48 { padding-left: 48rpx; }
 .pl-54 { padding-left: 54rpx; }
 .pl-58 { padding-left: 58rpx; }
+.pl-82 { padding-left: 82rpx; }
 
 .mx-auto { margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto; }
 .mx-8  { margin-left: 8rpx;  margin-right: 8rpx;  }
@@ -241,7 +242,9 @@ image { box-sizing: content-box; }
 .mt-72 { margin-top: 72rpx; }
 .mt-80 { margin-top: 80rpx; }
 .mt-96 { margin-top: 96rpx; }
+.mt-116 { margin-top: 116rpx; }
 .mt-120 { margin-top: 120rpx; }
+.mt-160 { margin-top: 160rpx; }
 
 
 .mr-2 { margin-right: 2rpx; }
@@ -268,6 +271,8 @@ image { box-sizing: content-box; }
 .mr-60 { margin-right: 60rpx; }
 .mr-62 { margin-right: 62rpx; }
 .mr-68 { margin-right: 68rpx; }
+.mr-72 { margin-right: 72rpx; }
+.mr-80 { margin-right: 80rpx; }
 
 
 .mb-6 { margin-bottom: 6rpx; }
@@ -333,6 +338,9 @@ image { box-sizing: content-box; }
 .vw-100 { width: 100vw; }
 .vh-100 { height: 100vh; }
 
+
+.icon-arrow-right { width: 20rpx; height: 24rpx; }
+
 .icon-18x18 { width: 18rpx; height: 18rpx; }
 .icon-24x24 { width: 24rpx; height: 24rpx; }
 .icon-28x28 { width: 28rpx; height: 28rpx; }
@@ -355,9 +363,11 @@ image { box-sizing: content-box; }
 
 .icon-100x100 { width: 100rpx; height: 100rpx; }
 .icon-104x104 { width: 104rpx; height: 104rpx; }
+.icon-112x112 { width: 112rpx; height: 112rpx; }
 .icon-120x120 { width: 120rpx; height: 120rpx; }
 .icon-160x160 { width: 160rpx; height: 160rpx; }
 .icon-145x145 { width: 145rpx; height: 145rpx; }
+.icon-148x148 { width: 148rpx; height: 148rpx; }
 .icon-238x238 { width: 238rpx; height: 238rpx; }
 .icon-438x438 { width: 438rpx; height: 438rpx; }
 
@@ -365,6 +375,8 @@ image { box-sizing: content-box; }
  * 边框
  */
 .border-bottom { border-bottom: 1rpx solid #F5F5F5;}
+.border-top { border-top: 1rpx solid #F5F5F5;}
+
 
 
 /**
@@ -378,6 +390,7 @@ image { box-sizing: content-box; }
 .rounded-16 { border-radius: 16rpx; }
 .rounded-20 { border-radius: 20rpx; }
 .rounded-24 { border-radius: 24rpx; }
+.rounded-28 { border-radius: 28rpx; }
 .rounded-30 { border-radius: 30rpx; }
 .rounded-34 { border-radius: 34rpx; }
 .rounded-38 { border-radius: 38rpx; }
@@ -519,6 +532,7 @@ image { box-sizing: content-box; }
 .text-center   { text-align: center; } 
 .text-right    { text-align: right; }
 .text-left     { text-align: left; }
+.text-justify  {text-align-last: justify;}
 .text-break    { word-break: break-all; }
 
 /**
@@ -578,6 +592,8 @@ image { box-sizing: content-box; }
 /**
  * 占位
  */
+.space-88  { height: 88rpx;  }
+.space-100 { height: 100rpx; }
 .space-200 { height: 200rpx; }
 
 

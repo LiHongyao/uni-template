@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crypto-js": "^4.1.1",
+    "js-base64": "^3.7.2",
     "lg-bus": "^1.0.2",
-    "lg-tools": "^1.0.50"
+    "lg-tools": "^1.0.50",
+    "lg-validator": "^1.0.6"
   }
 }
