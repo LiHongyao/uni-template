@@ -10,8 +10,8 @@ export const APP_HOST = APP_HOST_PRO;
 export const APP_OSS_HOST = "https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com";
 
 // -- Keys
-export const APP_KEY_TOKEN = "YHWX_TOKEN"; /** 记录登录token */
-export const APP_KEY_PHONE = 'YHWX_HAS_BIND_PHONE'; /** 记录是否绑定手机号 **/
+export const APP_KEY_TOKEN = "UNI_TOKNE"; /** 记录登录token */
+export const APP_KEY_PHONE = 'UNI_HAS_BIND_PHONE'; /** 记录是否绑定手机号 **/
 
 
 // -- 杂项信息

@@ -71,7 +71,8 @@ export default class Utils {
 	static loading(title) {
 		uni.showLoading({
 			title,
-			duration: 20 * 1000
+			duration: 20 * 1000,
+			mask: true
 		})
 	}
 
@@ -124,9 +125,9 @@ export default class Utils {
 				scopes: "auth_base", // 静默授权
 				withCredentials: true,
 				success({ code }) {
+					console.log("登录授权code：", code);
 					loginFn && loginFn(code).then(r => {
-						console.log("登录授权code：", code);
-						const { isBindPhone,  token } = r.data;
+						const { isBindPhone, approveStatus, token } = r.data;
 						uni.setStorageSync(APP_KEY_TOKEN, token);
 						uni.setStorageSync(APP_KEY_PHONE, isBindPhone);
 						resolve(null);
@@ -151,8 +152,9 @@ export default class Utils {
 						})*/
 					})
 				},
-				fail() {
-					reject();
+				fail(err) {
+					console.log("wx.login error：", err);
+					reject(err);
 				}
 			})
 		})
@@ -182,7 +184,71 @@ export default class Utils {
 		wx.reportAnalytics(event_name, data);
 		// #endif
 	}
-
+	/**
+	 * 打开地图选择位置。
+	 */
+	static chooseLocation() {
+		return new Promise((resolve) => {
+			uni.chooseLocation({
+				success: function(res) {
+					if (/ok/.test(res.errMsg) && res.name) {
+						delete res.errMsg;
+						resolve(res);
+					} else {
+						Utils.toast("请选择地址并点击确定~");
+					}
+				},
+				fail() {
+					// 调用失败 / 表示用户未授权
+					// 判断是否是第1次进入 ，如果是第1次进入，在拒绝授权后不再弹框
+					if (!uni.getStorageSync('UN_FIRSTIN')) {
+						uni.setStorageSync('UN_FIRSTIN', true);
+						return;
+					}
+					uni.getSetting({
+						success(res) {
+							// 判断用户是否授权获取定位信息
+							if (!res.authSetting['scope.userLocation']) {
+								uni.showModal({
+									title: "授权获取你的位置信息",
+									content: "定位，获取用户距离",
+									success(r) {
+										if (r.confirm) {
+											// 如果用户同意授权地理信息，则打开授权设置页面，判断用户的操作
+											uni.openSetting({
+												success(data) {
+													// 如果用户授权了地理信息在， 则提示授权成功
+													if (data.authSetting['scope.userLocation']) {
+														uni.chooseLocation({
+															success(res) {
+																if (/ok/.test(res.errMsg) && res.name) {
+																	delete res.errMsg;
+																	resolve(res);
+																} else {
+																	Utils.toast("请选择地址列表并点击确定~");
+																}
+															}
+														})
+													} else {
+														console.log('[Utils.chooseLocation]：用户未授权')
+													}
+												}
+											})
+										} else {
+											console.log('[Utils.chooseLocation]：用户点击取消授权')
+										}
+									}
+								})
+							}
+						},
+						fail() {
+							console.log('[Utils.chooseLocation]：拉取用户授权配置信息失败')
+						}
+					})
+				}
+			});
+		})
+	}
 	/**
 	 * 获取定位信息
 	 */
@@ -190,16 +256,9 @@ export default class Utils {
 		return new Promise((resolve) => {
 			// 直接获取用户定位信息 / 获取失败则做后续处理
 			uni.getLocation({
-				success({
-					errMsg,
-					latitude,
-					longitude
-				}) {
+				success({ errMsg, latitude, longitude }) {
 					if (/ok/.test(errMsg)) {
-						resolve({
-							lat: latitude,
-							lng: longitude
-						});
+						resolve({ lat: latitude, lng: longitude });
 					} else {
 						resolve({});
 					}
@@ -226,32 +285,16 @@ export default class Utils {
 											uni.openSetting({
 												success(data) {
 													// 如果用户授权了地理信息在， 则提示授权成功
-													if (data.authSetting[
-															'scope.userLocation'
-														]) {
+													if (data.authSetting['scope.userLocation']) {
 														uni.getLocation({
-															success({
-																errMsg,
-																latitude,
-																longitude
-															}) {
-																if (/ok/
-																	.test(
-																		errMsg
-																	)
-																) {
-																	resolve
-																		({
-																			lat: latitude,
-																			lng: longitude
-																		});
+															success({ errMsg, latitude, longitude }) {
+																if (/ok/.test(errMsg)) {
+																	resolve({ lat: latitude, lng: longitude });
 																} else {
-																	resolve
-																		({});
+																	resolve({});
 																}
 															},
 														})
-
 													} else {
 														resolve({});
 													}
@@ -279,6 +322,7 @@ export default class Utils {
 		uni.getSetting({
 			withSubscriptions: true,
 			success(res) {
+				console.log(res)
 				uni.showModal({
 					title: "授权获取你的订阅",
 					content: "用于定位当前位置和商家的距离",

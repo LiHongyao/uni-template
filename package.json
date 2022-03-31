@@ -12,8 +12,10 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "js-base64": "^3.7.2",
+    "lg-big": "^1.0.5",
     "lg-bus": "^1.0.2",
     "lg-tools": "^1.0.50",
-    "lg-validator": "^1.0.6"
+    "lg-validator": "^1.0.6",
+    "qrcode": "^1.5.0"
   }
 }

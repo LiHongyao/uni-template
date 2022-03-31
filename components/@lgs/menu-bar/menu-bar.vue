@@ -26,7 +26,6 @@
 		}).exec();
 		// 2. 子元素宽度和距离左侧距离
 		query.selectAll('.v-menu-bar__item').boundingClientRect(data => {
-			console.log(data);
 			let len = data.length;
 			let arr = [];
 			for (let i = 0; i < len; i++) {
